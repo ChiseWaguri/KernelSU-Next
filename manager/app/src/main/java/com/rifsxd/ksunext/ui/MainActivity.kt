@@ -29,7 +29,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -39,7 +38,6 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.dergoogler.mmrl.platform.Platform
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.NavHostAnimatedDestinationStyle
 import com.ramcosta.composedestinations.generated.destinations.ExecuteModuleActionScreenDestination
@@ -54,7 +52,7 @@ import com.rifsxd.ksunext.ui.theme.KernelSUTheme
 import com.rifsxd.ksunext.ui.util.LocalSnackbarHost
 import com.rifsxd.ksunext.ui.util.rootAvailable
 import com.rifsxd.ksunext.ui.util.install
-import com.rifsxd.ksunext.ui.webui.initPlatform
+import com.rifsxd.ksunext.ui.util.*
 
 class MainActivity : ComponentActivity() {
 
@@ -69,7 +67,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val isManager = Natives.becomeManager(ksuApp.packageName)
-        if (isManager) install()
+	    if (isManager) install()
 
         setContent {
             KernelSUTheme {
@@ -81,11 +79,6 @@ class MainActivity : ComponentActivity() {
                     FlashScreenDestination.route -> false // Hide for FlashScreenDestination
                     ExecuteModuleActionScreenDestination.route -> false // Hide for ExecuteModuleActionScreen
                     else -> true
-                }
-
-                // pre-init platform to faster start WebUI X activities
-                LaunchedEffect(Unit) {
-                    initPlatform()
                 }
 
                 Scaffold(
